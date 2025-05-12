@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Side Pong - Player vs AI</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    .container {
+      width: 600px;
+      height: 400px;
+      background-color: black;
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .paddle {
+      width: 10px;
+      height: 80px;
+      background: white;
+      position: absolute;
+    }
+
+    .paddle-left {
+      left: 0;
+      top: 160px;
+    }
+
+    .paddle-right {
+      right: 0;
+      top: 160px;
+    }
+
+    .ball {
+      width: 15px;
+      height: 15px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    #start-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Side Pong - Player vs AI</h1>
+  <button id="start-button">Start Game</button>
+  <div class="container" id="gameContainer">
+    <div class="paddle paddle-left" id="paddleLeft"></div>
+    <div class="paddle paddle-right" id="paddleRight"></div>
+    <div class="ball" id="ball"></div>
+  </div>
+
+  <script src="{{ url_for('static', filename='game.js') }}"></script>
+</body>
+</html>
