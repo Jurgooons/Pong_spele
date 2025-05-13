@@ -50,16 +50,37 @@
       font-size: 16px;
       cursor: pointer;
     }
+
+    #back-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    #back-button:hover {
+      background-color: #666;
+    }
   </style>
 </head>
 <body>
   <h1>Side Pong - Player vs AI</h1>
-  <button id="start-button">Start Game</button>
+  <button id="start-button">Sākt Spēli</button>
+
   <div class="container" id="gameContainer">
     <div class="paddle paddle-left" id="paddleLeft"></div>
     <div class="paddle paddle-right" id="paddleRight"></div>
     <div class="ball" id="ball"></div>
   </div>
+
+  <button onclick="window.location.href='/'" id="back-button">Atpakaļ</button>
 
   <script src="{{ url_for('static', filename='game.js') }}"></script>
 </body>

@@ -9,10 +9,29 @@ let ballY = container.clientHeight / 2;
 let ballSpeedX = 4;
 let ballSpeedY = 3;
 let intervalId;
+let playerHits = 0;
+
+
+const hitCounter = document.createElement("div");
+hitCounter.id = "hitCounter";
+hitCounter.style.position = "absolute";
+hitCounter.style.top = "10px";
+hitCounter.style.left = "10px";
+hitCounter.style.color = "white";
+hitCounter.style.fontSize = "20px";
+hitCounter.style.zIndex = "1000";
+hitCounter.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+hitCounter.style.padding = "5px 10px";
+hitCounter.style.borderRadius = "5px";
+hitCounter.textContent = "Hits: 0";
+document.body.appendChild(hitCounter);
+
 
 startButton.addEventListener("click", startGame);
 
 function startGame() {
+  playerHits = 0;
+  hitCounter.textContent = "Hits: 0";
   resetBall();
   intervalId = setInterval(updateGame, 20);
 }
@@ -24,7 +43,7 @@ function resetBall() {
   ballSpeedY = (Math.random() * 4 - 2);
 }
 
-// Mouse controls left paddle
+
 container.addEventListener("mousemove", (e) => {
   const rect = container.getBoundingClientRect();
   let y = e.clientY - rect.top - paddleLeft.offsetHeight / 2;
@@ -36,36 +55,49 @@ function updateGame() {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
 
-  // Bounce on top/bottom walls
+ 
   if (ballY <= 0 || ballY + ball.offsetHeight >= container.clientHeight) {
     ballSpeedY *= -1;
   }
 
-  // Left paddle collision (Player)
+  
   if (ballX <= paddleLeft.offsetWidth) {
     const paddleTop = paddleLeft.offsetTop;
     const paddleBottom = paddleTop + paddleLeft.offsetHeight;
 
     if (ballY + ball.offsetHeight >= paddleTop && ballY <= paddleBottom) {
-      ballSpeedX *= -1;
+      ballSpeedX *= -1.1;
+      ballSpeedY *= 1.1;
+
+      const maxSpeed = 15;
+      ballSpeedX = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedX));
+      ballSpeedY = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedY));
+
+      playerHits++;
+      hitCounter.textContent = "Hits: " + playerHits;
     } else {
       alert("AI Wins!");
       clearInterval(intervalId);
     }
   }
 
-  // Right paddle (AI follows ball)
+  
   let targetY = ballY - paddleRight.offsetHeight / 2;
   targetY = Math.max(0, Math.min(targetY, container.clientHeight - paddleRight.offsetHeight));
   paddleRight.style.top = targetY + "px";
 
-  // Right paddle collision (AI)
+  
   if (ballX + ball.offsetWidth >= container.clientWidth - paddleRight.offsetWidth) {
     const paddleTop = paddleRight.offsetTop;
     const paddleBottom = paddleTop + paddleRight.offsetHeight;
 
     if (ballY + ball.offsetHeight >= paddleTop && ballY <= paddleBottom) {
-      ballSpeedX *= -1;
+      ballSpeedX *= -1.1;
+      ballSpeedY *= 1.1;
+
+      const maxSpeed = 15;
+      ballSpeedX = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedX));
+      ballSpeedY = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedY));
     } else {
       alert("You Win!");
       clearInterval(intervalId);
