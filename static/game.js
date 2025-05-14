@@ -11,7 +11,6 @@ let ballSpeedY = 3;
 let intervalId;
 let playerHits = 0;
 
-
 const hitCounter = document.createElement("div");
 hitCounter.id = "hitCounter";
 hitCounter.style.position = "absolute";
@@ -25,7 +24,6 @@ hitCounter.style.padding = "5px 10px";
 hitCounter.style.borderRadius = "5px";
 hitCounter.textContent = "Hits: 0";
 document.body.appendChild(hitCounter);
-
 
 startButton.addEventListener("click", startGame);
 
@@ -43,7 +41,6 @@ function resetBall() {
   ballSpeedY = (Math.random() * 4 - 2);
 }
 
-
 container.addEventListener("mousemove", (e) => {
   const rect = container.getBoundingClientRect();
   let y = e.clientY - rect.top - paddleLeft.offsetHeight / 2;
@@ -55,12 +52,12 @@ function updateGame() {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
 
- 
+
   if (ballY <= 0 || ballY + ball.offsetHeight >= container.clientHeight) {
     ballSpeedY *= -1;
   }
 
-  
+
   if (ballX <= paddleLeft.offsetWidth) {
     const paddleTop = paddleLeft.offsetTop;
     const paddleBottom = paddleTop + paddleLeft.offsetHeight;
@@ -68,25 +65,25 @@ function updateGame() {
     if (ballY + ball.offsetHeight >= paddleTop && ballY <= paddleBottom) {
       ballSpeedX *= -1.1;
       ballSpeedY *= 1.1;
-
       const maxSpeed = 15;
       ballSpeedX = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedX));
       ballSpeedY = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedY));
-
       playerHits++;
       hitCounter.textContent = "Hits: " + playerHits;
     } else {
       alert("AI Wins!");
+      const username = document.getElementById("username").value.trim();
+      submitScore(username || "Unknown", playerHits);
       clearInterval(intervalId);
     }
   }
 
-  
+
   let targetY = ballY - paddleRight.offsetHeight / 2;
   targetY = Math.max(0, Math.min(targetY, container.clientHeight - paddleRight.offsetHeight));
   paddleRight.style.top = targetY + "px";
 
-  
+ 
   if (ballX + ball.offsetWidth >= container.clientWidth - paddleRight.offsetWidth) {
     const paddleTop = paddleRight.offsetTop;
     const paddleBottom = paddleTop + paddleRight.offsetHeight;
@@ -94,16 +91,36 @@ function updateGame() {
     if (ballY + ball.offsetHeight >= paddleTop && ballY <= paddleBottom) {
       ballSpeedX *= -1.1;
       ballSpeedY *= 1.1;
-
       const maxSpeed = 15;
       ballSpeedX = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedX));
       ballSpeedY = Math.max(-maxSpeed, Math.min(maxSpeed, ballSpeedY));
     } else {
       alert("You Win!");
+      const username = document.getElementById("username").value.trim();
+      submitScore(username || "Unknown", playerHits);
       clearInterval(intervalId);
     }
   }
 
   ball.style.left = ballX + "px";
   ball.style.top = ballY + "px";
+}
+
+
+function submitScore(username, hits) {
+  fetch('/submit-score', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, hits })
+  })
+  .then(response => {
+    if (!response.ok) {
+      alert("Kļūda sūtot rezultātu uz serveri.");
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 }

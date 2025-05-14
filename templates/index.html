@@ -49,6 +49,7 @@
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     #back-button {
@@ -68,10 +69,40 @@
     #back-button:hover {
       background-color: #666;
     }
+
+    #username {
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    #save-username-button {
+      padding: 8px 14px;
+      font-size: 14px;
+      margin-left: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .username-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Side Pong - Player vs AI</h1>
+
+ 
+  <div class="username-container">
+    <label for="username">Lietotājvārds:</label>
+    <input type="text" id="username" name="username" placeholder="Ievadi lietotājvārdu" required />
+    <button id="save-username-button">Saglabāt</button>
+  </div>
+
   <button id="start-button">Sākt Spēli</button>
 
   <div class="container" id="gameContainer">
@@ -80,8 +111,40 @@
     <div class="ball" id="ball"></div>
   </div>
 
+  <h2>Leaderboard</h2>
+<div id="leaderboard" style="max-width: 300px; margin: 0 auto; text-align: left;"></div>
+
   <button onclick="window.location.href='/'" id="back-button">Atpakaļ</button>
 
+
   <script src="{{ url_for('static', filename='game.js') }}"></script>
+  <script>
+function loadLeaderboard() {
+  fetch('/leaderboard')
+    .then(res => res.json())
+    .then(data => {
+      const leaderboard = document.getElementById('leaderboard');
+      leaderboard.innerHTML = '';
+      if (data.length === 0) {
+        leaderboard.innerHTML = '<p>No scores yet.</p>';
+        return;
+      }
+      const list = document.createElement('ol');
+      data.forEach(([username, hits]) => {
+        const item = document.createElement('li');
+        item.textContent = `${username} - ${hits} hits`;
+        list.appendChild(item);
+      });
+      leaderboard.appendChild(list);
+    })
+    .catch(err => {
+      console.error('Error loading leaderboard:', err);
+    });
+}
+
+
+window.addEventListener('DOMContentLoaded', loadLeaderboard);
+</script>
+
 </body>
 </html>
