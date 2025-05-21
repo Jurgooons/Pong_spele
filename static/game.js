@@ -107,7 +107,7 @@ function updateGame() {
 }
 
 
-function submitScore(username, hits) {
+function submitScore(username, hits) { // Nostua punktus un lietotajvardu
   fetch('/submit-score', {
     method: 'POST',
     headers: {

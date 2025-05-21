@@ -5,13 +5,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('home.html')  
+    return render_template('home.html') #izveido landing page
 
-@app.route('/game')
+@app.route('/game') #izveido spēles lapu
 def game():
     return render_template('index.html')  
 
-@app.route('/about')
+@app.route('/about') #izveido paskaidroujuma lapu
 def about():
     return render_template('about.html')  
 

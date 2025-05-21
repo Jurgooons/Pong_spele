@@ -119,7 +119,8 @@
 
   <script src="{{ url_for('static', filename='game.js') }}"></script>
   <script>
-function loadLeaderboard() {
+    
+function loadLeaderboard() { //Uztaisa leaderboard 
   fetch('/leaderboard')
     .then(res => res.json())
     .then(data => {
