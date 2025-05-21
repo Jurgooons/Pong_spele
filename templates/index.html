@@ -45,7 +45,7 @@
       left: 50%;
     }
 
-    #start-button {
+    #start-button { 
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
@@ -97,13 +97,13 @@
   <h1>Side Pong - Player vs AI</h1>
 
  
-  <div class="username-container">
+  <div class="username-container"> <!--Lietotaj varda ievade-->
     <label for="username">Lietotājvārds:</label>
     <input type="text" id="username" name="username" placeholder="Ievadi lietotājvārdu" required />
     <button id="save-username-button">Saglabāt</button>
   </div>
 
-  <button id="start-button">Sākt Spēli</button>
+  <button id="start-button">Sākt Spēli</button> <!--Izveido speles saksanas poga-->
 
   <div class="container" id="gameContainer">
     <div class="paddle paddle-left" id="paddleLeft"></div>
@@ -111,7 +111,7 @@
     <div class="ball" id="ball"></div>
   </div>
 
-  <h2>Leaderboard</h2>
+  <h2>Leaderboard</h2> <!--Leaderboard html-->
 <div id="leaderboard" style="max-width: 300px; margin: 0 auto; text-align: left;"></div>
 
   <button onclick="window.location.href='/'" id="back-button">Atpakaļ</button>
