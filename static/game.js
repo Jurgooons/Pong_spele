@@ -1,9 +1,11 @@
+// mainīgie no html
 const container = document.getElementById("gameContainer");
 const paddleLeft = document.getElementById("paddleLeft");
 const paddleRight = document.getElementById("paddleRight");
 const ball = document.getElementById("ball");
 const startButton = document.getElementById("start-button");
 
+// mainīgie spēles sākumam
 let ballX = container.clientWidth / 2;
 let ballY = container.clientHeight / 2;
 let ballSpeedX = 4;
@@ -11,6 +13,7 @@ let ballSpeedY = 3;
 let intervalId;
 let playerHits = 0;
 
+// punktu skaitītājam iestatijui
 const hitCounter = document.createElement("div");
 hitCounter.id = "hitCounter";
 hitCounter.style.position = "absolute";
@@ -25,8 +28,11 @@ hitCounter.style.borderRadius = "5px";
 hitCounter.textContent = "Hits: 0";
 document.body.appendChild(hitCounter);
 
+// poga lai sāktu spēli
 startButton.addEventListener("click", startGame);
 
+
+//palaiž spēli
 function startGame() {
   playerHits = 0;
   hitCounter.textContent = "Hits: 0";
@@ -34,6 +40,7 @@ function startGame() {
   intervalId = setInterval(updateGame, 20);
 }
 
+// pēc spēles novieto bumbu atpakaļ centrā
 function resetBall() {
   ballX = container.clientWidth / 2;
   ballY = container.clientHeight / 2;
@@ -41,6 +48,7 @@ function resetBall() {
   ballSpeedY = (Math.random() * 4 - 2);
 }
 
+// kontrolē lāpstiņu ar peli
 container.addEventListener("mousemove", (e) => {
   const rect = container.getBoundingClientRect();
   let y = e.clientY - rect.top - paddleLeft.offsetHeight / 2;
@@ -48,20 +56,25 @@ container.addEventListener("mousemove", (e) => {
   paddleLeft.style.top = y + "px";
 });
 
+
+//spēles fizika
 function updateGame() {
+
+  // bumbas kustība
   ballX += ballSpeedX;
   ballY += ballSpeedY;
 
 
+  // atsisties no augšējās un apakšejās malas
   if (ballY <= 0 || ballY + ball.offsetHeight >= container.clientHeight) {
     ballSpeedY *= -1;
   }
 
-
+ // atsisties no lāpstiņas
   if (ballX <= paddleLeft.offsetWidth) {
     const paddleTop = paddleLeft.offsetTop;
     const paddleBottom = paddleTop + paddleLeft.offsetHeight;
-
+//paliek ātrāka bumba kad atsitas pret lāpstiņu
     if (ballY + ball.offsetHeight >= paddleTop && ballY <= paddleBottom) {
       ballSpeedX *= -1.1;
       ballSpeedY *= 1.1;
@@ -78,12 +91,12 @@ function updateGame() {
     }
   }
 
-
+// "AI" seko bumbai visu laiku ar lapstinas centru
   let targetY = ballY - paddleRight.offsetHeight / 2;
   targetY = Math.max(0, Math.min(targetY, container.clientHeight - paddleRight.offsetHeight));
   paddleRight.style.top = targetY + "px";
 
- 
+ // kad saduras ar "ai" lāpstiņu
   if (ballX + ball.offsetWidth >= container.clientWidth - paddleRight.offsetWidth) {
     const paddleTop = paddleRight.offsetTop;
     const paddleBottom = paddleTop + paddleRight.offsetHeight;
@@ -101,7 +114,7 @@ function updateGame() {
       clearInterval(intervalId);
     }
   }
-
+//bumbas kustība
   ball.style.left = ballX + "px";
   ball.style.top = ballY + "px";
 }
